@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="F_CoolTank" Id="{93587bc4-3546-4283-bd19-cf03bd238455}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_CoolTank 
+
+VAR_INPUT
+	refTank : REFERENCE TO ST_Tank;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF refTank.temperature > 50 THEN
+	refTank.temperature := refTank.temperature - 1;
+END_IF
+
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="F_CoolTank">
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

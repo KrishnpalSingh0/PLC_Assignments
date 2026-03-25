@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_Tank" Id="{48be6a43-a4e5-4e91-876b-572157165462}">
+    <Declaration><![CDATA[TYPE ST_Tank :
+STRUCT
+	
+	id : INT;
+	temperature : REAL;
+    level : REAL;
+	alarm : BOOL ;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

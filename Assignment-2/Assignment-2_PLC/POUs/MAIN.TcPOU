@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="MAIN" Id="{277a83c4-4c72-49a2-be58-cbda584e63b6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	iTankController : I_TankController;
+	fbTankController : FB_TankController;
+
+	tank1 : ST_Tank := (id := 1, temperature := 90.8, level := 91);
+	tank2 : ST_Tank := (id := 2, temperature := 60.5, level := 95);
+	tank3 : ST_Tank := (id := 3, temperature := 75.2, level := 50);
+
+	pTank1 : POINTER TO ST_Tank;
+	pTank2 : POINTER TO ST_Tank;
+	pTank3 : POINTER TO ST_Tank;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[pTank1 := ADR(tank1);
+pTank2 := ADR(tank2);
+pTank3 := ADR(tank3);
+
+iTankController := fbTankController;
+
+iTankController.CheckSafety(pTank := pTank1);
+iTankController.ApplyCooling(refTank := tank1);
+
+iTankController.CheckSafety(pTank := pTank2);
+iTankController.ApplyCooling(refTank := tank2);
+
+iTankController.CheckSafety(pTank := pTank3);
+iTankController.ApplyCooling(refTank := tank3);]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="55" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="58" Count="9" />
+      <LineId Id="57" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
