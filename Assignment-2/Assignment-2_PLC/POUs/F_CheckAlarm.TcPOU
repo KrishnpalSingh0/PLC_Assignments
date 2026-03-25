@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="F_CheckAlarm" Id="{14b92df3-d3ed-4d85-a631-2bb9117b2f83}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_CheckAlarm : BOOL
+
+VAR_INPUT
+	pTank : POINTER TO ST_Tank;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF pTank <> 0 THEN
+	IF (pTank^.temperature > 80) OR (pTank^.level > 90) THEN
+		pTank^.alarm := TRUE;
+	ELSE
+		pTank^.alarm := FALSE;
+	END_IF
+	F_CheckAlarm := pTank^.alarm;
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="F_CheckAlarm">
+      <LineId Id="10" Count="0" />
+      <LineId Id="26" Count="3" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="22" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
