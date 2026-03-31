@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="MAIN" Id="{eb3d120a-ee25-4029-82d3-94ac15523718}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fbWashingMachine : FB_WashingMachine;
+	fbSoftWash : FB_SoftWash;
+	fbNormalWash : FB_NormalWash;
+	fbHeavyWash : FB_HeavyWash;
+	bRunOnce : BOOL;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbWashingMachine.CheckError();
+IF (NOT fbWashingMachine.bCheckError) AND (NOT bRunOnce) THEN
+	fbWashingMachine.SelectStrategy(fbHeavyWash);
+	fbWashingMachine.Start();
+	bRunOnce := TRUE;
+END_IF
+fbWashingMachine();
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="69" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="60" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

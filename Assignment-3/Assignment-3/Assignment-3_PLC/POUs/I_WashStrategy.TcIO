@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <Itf Name="I_WashStrategy" Id="{5fa598a7-78ea-4ca8-9727-001f86b81944}">
+    <Declaration><![CDATA[INTERFACE I_WashStrategy
+]]></Declaration>
+    <Method Name="GetDuration" Id="{4c64d98c-0676-4393-93d4-a58eb978ce16}">
+      <Declaration><![CDATA[METHOD GetDuration : TIME
+]]></Declaration>
+    </Method>
+    <Method Name="Start" Id="{de175e78-f862-4276-9927-97214fdaa317}">
+      <Declaration><![CDATA[METHOD Start 
+VAR_IN_OUT
+    config : ST_MachineConfig;
+END_VAR]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

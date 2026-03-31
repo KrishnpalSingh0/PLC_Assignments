@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="E_WashError" Id="{55c4769c-6af8-43ca-aaf0-52a32dba3517}">
+    <Declaration><![CDATA[TYPE E_WashError :
+(
+    None,
+    DoorOpenFault,
+    WaterSupplyFault
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
