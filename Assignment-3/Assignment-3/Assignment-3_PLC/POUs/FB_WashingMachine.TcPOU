@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_WashingMachine" Id="{d9cad478-97c2-4b5a-bd9f-dabdc1c7c9c0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_WashingMachine
+VAR
+stConfig : ST_MachineConfig;
+
+eCurrentState : E_WashState := E_WashState.Idle;
+eErrorState : E_WashError := E_WashError.None;
+
+strategy : I_WashStrategy;
+
+bDoorClosed : BOOL;
+bWaterSupplyOK : BOOL;
+
+fillTimer : TON;
+washTimer : TON;
+drainTimer : TON;
+
+bMachineRunning : BOOL;
+bCycleComplete : BOOL;
+
+tRemainingTime : TIME;
+
+statusMessage : STRING(30);
+bCheckError : BOOL := TRUE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE eCurrentState OF
+
+E_WashState.Idle:
+    statusMessage := 'Machine Idle';
+    bMachineRunning := FALSE;
+
+E_WashState.Filling:
+    statusMessage := 'Filling Water';
+    fillTimer(IN := TRUE, PT:= T#5S);
+    tRemainingTime := fillTimer.PT - fillTimer.ET;
+
+    IF fillTimer.Q THEN
+        fillTimer(IN := FALSE);
+        eCurrentState := E_WashState.Washing;
+        IF strategy <> 0 THEN
+            washTimer(IN := TRUE, PT := strategy.GetDuration());
+        ELSE
+            washTimer(IN := TRUE, PT := T#10S);
+        END_IF
+    END_IF
+
+
+E_WashState.Washing:
+    statusMessage := 'Washing Clothes';
+    washTimer(IN := TRUE, PT := washTimer.PT);
+    tRemainingTime := washTimer.PT - washTimer.ET;
+
+    IF washTimer.Q THEN
+        washTimer(IN := FALSE);
+        eCurrentState := E_WashState.Draining;
+        drainTimer(IN := TRUE, PT := T#3S);
+    END_IF
+
+E_WashState.Draining:
+    statusMessage := 'Draining Water';
+    drainTimer(IN := TRUE,  PT := drainTimer.PT);
+    tRemainingTime := drainTimer.PT - drainTimer.ET;
+
+    IF drainTimer.Q THEN
+        drainTimer(IN := FALSE);
+        eCurrentState := E_WashState.Completed;
+    END_IF
+
+E_WashState.Completed:
+    statusMessage := 'Wash Cycle Completed';
+    bMachineRunning := FALSE;
+    bCycleComplete := TRUE;
+
+END_CASE]]></ST>
+    </Implementation>
+    <Method Name="CheckError" Id="{b91ed68d-89e7-465f-bf80-cf0aa9898940}">
+      <Declaration><![CDATA[METHOD CheckError 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT bDoorClosed THEN
+	eErrorState := E_WashError.DoorOpenFault;
+	eCurrentState := E_WashState.Idle;
+	RETURN;
+END_IF
+
+IF NOT bWaterSupplyOK THEN
+	eErrorState := E_WashError.WaterSupplyFault;
+	eCurrentState := E_WashState.Idle;
+	RETURN;	
+END_IF
+IF bDoorClosed AND bWaterSupplyOK THEN
+	bCheckError := FALSE;
+END_IF  ]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="CurrentState" Id="{a11d02e8-70f1-4496-8777-09dd93db3b15}">
+      <Declaration><![CDATA[PROPERTY CurrentState : E_WashState]]></Declaration>
+      <Get Name="Get" Id="{38d83dfc-e513-4a1a-b2a8-f6751fbff10c}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrentState := eCurrentState;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{9518327f-47de-4d10-b51d-632e57ce4ae0}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[eCurrentState := CurrentState;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="RemainingTime" Id="{6781ba5d-0f62-4a11-8a23-f79f1ddfd989}">
+      <Declaration><![CDATA[PROPERTY RemainingTime : TIME]]></Declaration>
+      <Get Name="Get" Id="{fe6d4248-4d9d-4314-9c11-f75fffaf576b}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RemainingTime := tRemainingTime;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{2525dfb5-c440-4590-bd1b-c44b47a4d420}">
+        <Declaration><![CDATA[
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[tRemainingTime := RemainingTime;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="SelectStrategy" Id="{60ff924f-c692-4b58-b248-58b19266f6bb}">
+      <Declaration><![CDATA[METHOD SelectStrategy 
+VAR_INPUT
+	iStrategy : I_WashStrategy;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[strategy := iStrategy;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Start" Id="{7c45c62e-10b3-4721-9f43-77fc57ee4b92}">
+      <Declaration><![CDATA[METHOD Start 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eErrorState := E_WashError.None;
+bMachineRunning := TRUE;
+bCycleComplete := FALSE;
+eCurrentState := E_WashState.Filling;
+IF strategy <> 0 THEN
+	strategy.Start(stConfig);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{4da8604f-44d3-4f7d-a294-de9bbbd7fd03}">
+      <Declaration><![CDATA[METHOD Stop 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fillTimer(IN:=FALSE);
+washTimer(IN:=FALSE);
+drainTimer(IN:=FALSE);
+
+bMachineRunning := FALSE;
+bCycleComplete := FALSE;
+
+eCurrentState := E_WashState.Idle;
+eErrorState := E_WashError.None;
+tRemainingTime := T#0S;
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_WashingMachine">
+      <LineId Id="166" Count="4" />
+      <LineId Id="172" Count="3" />
+      <LineId Id="177" Count="4" />
+      <LineId Id="183" Count="10" />
+      <LineId Id="195" Count="6" />
+      <LineId Id="203" Count="3" />
+      <LineId Id="208" Count="5" />
+      <LineId Id="215" Count="5" />
+      <LineId Id="33" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.CheckError">
+      <LineId Id="6" Count="9" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.CurrentState.Get">
+      <LineId Id="2" Count="0" />
+      <LineId Id="6" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.CurrentState.Set">
+      <LineId Id="6" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.RemainingTime.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.RemainingTime.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.SelectStrategy">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.Start">
+      <LineId Id="40" Count="2" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="47" Count="2" />
+      <LineId Id="26" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_WashingMachine.Stop">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="2" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

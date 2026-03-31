@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_SoftWash" Id="{af36a2d9-72f4-4b27-89da-efc27d7b43fd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SoftWash IMPLEMENTS I_WashStrategy
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetDuration" Id="{7a0273f3-9a2a-4c8d-9cdb-fcc8ce8c8ff6}">
+      <Declaration><![CDATA[METHOD GetDuration : TIME
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetDuration := T#5S;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Start" Id="{d5646bb7-63db-44bf-84f2-9950948a8be2}">
+      <Declaration><![CDATA[METHOD Start 
+VAR_IN_OUT
+    config : ST_MachineConfig;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[config.iDrumSpeed := 800;
+config.iWaterTemperature := 35;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_SoftWash">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SoftWash.GetDuration">
+      <LineId Id="4" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_SoftWash.Start">
+      <LineId Id="5" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
