@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_BottleCounter" Id="{2e1b4de1-7803-4fc5-b057-7cf3f26ea976}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_BottleCounter
+
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="BottleCount" Id="{b4662ef8-1a55-4f3c-9a0f-fb26e5b20afa}">
+      <Declaration><![CDATA[METHOD BottleCount ]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GVL.g_nBottleCount := GVL.g_nBottleCount + 1;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{16a52685-adc2-4e1d-90be-4aafb8164b5d}">
+      <Declaration><![CDATA[METHOD Reset ]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GVL.g_nBottleCount := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_BottleCounter">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BottleCounter.BottleCount">
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BottleCounter.Reset">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
