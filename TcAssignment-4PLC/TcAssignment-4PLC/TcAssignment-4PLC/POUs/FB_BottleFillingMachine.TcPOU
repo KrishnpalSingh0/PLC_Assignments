@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_BottleFillingMachine" Id="{6e6d30d8-27a8-456b-8600-9713bc574605}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_BottleFillingMachine IMPLEMENTS I_FillingMachine
+VAR
+    eState : E_MachineState := Idle;
+    eMode  : E_MachineMode;
+
+   
+    fbConveyor  : FB_Conveyor;
+    fbFilling   : FB_FillingUnit;
+    fbCounter   : FB_BottleCounter;
+	
+	tConveyerTime : TIME := T#14S;
+	tFillingTime : TIME  := T#9S;
+	tCappingTime : TIME  := T#4S;
+    tonCap : TON;
+	
+	tonSimBottle : TON;
+	tonSimLevel : TON;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Execute" Id="{d658876f-8194-4f96-b2bb-400bef464cb0}">
+      <Declaration><![CDATA[METHOD Execute 
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* STOP BUTTON *)
+
+IF GVL.g_bStopButton THEN
+	GVL.g_bAlarmLamp := TRUE;
+    eState := E_MachineState.Stopped;
+END_IF
+
+
+(* RESET COUNTER *)
+
+IF GVL.g_bresetCounter THEN 
+	fbCounter.Reset();
+	GVL.g_bresetCounter := FALSE;
+END_IF
+
+
+(* OVERFLOW CONDITION *)
+
+IF GVL.g_bBottleSensor AND GVL.g_bLevelSensor THEN
+	GVL.g_bAlarmLamp := TRUE;
+	eState := E_MachineState.Stopped;
+	GVL.g_sStatusofMachine := 'Error';	
+END_IF
+
+
+
+CASE eState OF
+
+
+(* ================= IDLE ================= *)
+
+E_MachineState.Idle:
+
+	GVL.g_eState := E_MachineState.Idle;
+
+	fbConveyor.Stop();
+	fbFilling.StopFill();
+
+	GVL.g_conveyorStatus := 'Conveyor is stopped';
+	GVL.g_sStatusofMachine := 'Press Start Button';
+
+	start();
+
+
+
+
+(* ================= RUNNING ================= *)
+
+E_MachineState.Running:
+
+	GVL.g_eState := E_MachineState.Running;
+
+	IF emode = E_MachineMode.none THEN 
+
+		GVL.g_sStatusofMachine := 'Select any Mode';
+
+	ELSE
+
+		GVL.g_sStatusofMachine := 'Bottle is Moving';
+		GVL.g_conveyorStatus := 'Conveyor is running';
+
+
+		(* AUTO MODE *)
+
+		IF emode = E_MachineMode.auto THEN 
+
+			GVL.g_bSIM_BottleSensor := FALSE;
+
+			fbConveyor.Start();
+
+			tonSimBottle(IN := NOT GVL.g_bSIM_BottleSensor, PT := tConveyerTime);
+
+
+			IF tonSimBottle.Q THEN 
+
+				GVL.g_bSIM_BottleSensor := TRUE;
+
+			END_IF
+
+
+			IF GVL.g_bBottleSensor OR GVL.g_bSIM_BottleSensor THEN 
+
+				fbConveyor.Stop();
+
+				tonSimBottle(IN := FALSE);
+
+				eState := E_MachineState.Filling;
+
+			END_IF
+
+
+			IF tonSimBottle.Q AND NOT (GVL.g_bBottleSensor OR GVL.g_bSIM_BottleSensor) THEN		
+
+				GVL.g_bAlarmLamp := TRUE;			
+
+				eState := E_MachineState.Stopped;		
+
+			END_IF
+
+
+
+		(* MANUAL MODE *)
+
+		ELSE
+
+			IF GVL.g_bBottleSensor THEN 
+
+				GVL.g_sStatusofMachine := 'Bottle detected';
+
+				GVL.g_conveyorStatus := 'Conveyor is stopped';
+
+				eState := E_MachineState.Filling;			
+
+			END_IF
+
+		END_IF
+
+	END_IF
+
+
+
+
+(* ================= FILLING ================= *)
+
+E_MachineState.Filling:
+
+	GVL.g_eState := E_MachineState.Filling;
+
+	GVL.g_sStatusofMachine := 'Bottle detected and filling started';
+	GVL.g_conveyorStatus := 'Conveyor is stopped';
+
+
+	IF emode = E_MachineMode.auto THEN		
+
+		GVL.g_bSIM_LevelSensor := FALSE;
+
+		fbFilling.StartFill();
+
+		tonSimLevel(IN := NOT GVL.g_bSIM_LevelSensor, PT := tFillingTime);
+
+
+		IF tonSimLevel.Q THEN 
+
+			GVL.g_sStatusofMachine := 'Filling Completed';
+
+			GVL.g_bSIM_LevelSensor := TRUE;
+
+		END_IF
+
+
+		IF GVL.g_bLevelSensor OR GVL.g_bSIM_LevelSensor THEN 
+
+			fbFilling.StopFill();
+
+			tonSimLevel(IN := FALSE);
+
+			eState := E_MachineState.Capping;
+
+		END_IF
+
+
+		IF tonSimLevel.Q AND NOT (GVL.g_bLevelSensor OR GVL.g_bSIM_LevelSensor) THEN
+
+			GVL.g_bAlarmLamp := TRUE;		
+
+			eState := E_MachineState.Stopped;
+
+		END_IF
+
+
+	ELSE
+
+
+		IF GVL.g_bLevelSensor THEN 
+
+			GVL.g_sStatusofMachine := 'Filling Completed';
+
+			eState := E_MachineState.Capping;
+
+		END_IF
+
+	END_IF
+
+
+
+
+
+(* ================= CAPPING ================= *)
+
+E_MachineState.Capping:
+
+	GVL.g_eState := E_MachineState.Capping;
+
+	GVL.g_sStatusofMachine := 'Bottle Capping';
+	GVL.g_conveyorStatus := 'Conveyor is stopped';
+
+	tonCap(IN := TRUE, PT := tCappingTime);
+
+	IF tonCap.Q THEN
+
+		tonCap(IN := FALSE);
+
+		fbCounter.BottleCount();
+
+		GVL.g_sStatusofMachine := 'Capping Completed';
+
+		(* Mode Check *)
+
+		IF emode = E_MachineMode.auto THEN
+			eState := E_MachineState.Running;   (* Auto → next bottle *)
+		ELSE
+			eState := E_MachineState.Stopped;   (* Manual → stop after one bottle *)
+
+		END_IF
+
+	END_IF
+
+
+
+(* ================= STOPPED ================= *)
+
+E_MachineState.Stopped:
+
+	GVL.g_eState := E_MachineState.Stopped;
+
+	stop();
+
+	GVL.g_conveyorStatus := 'Conveyor is stopped';
+
+	GVL.g_sStatusofMachine := 'Process Completed';
+
+	fbConveyor.Stop();
+	fbFilling.StopFill();
+
+
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SelectMode" Id="{b0a55c55-cfea-44fc-9a94-293c726bbb22}">
+      <Declaration><![CDATA[METHOD SelectMode : E_MachineMode
+VAR_INPUT
+	eSelectMode : E_MachineMode;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[eMode := eSelectMode;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Start" Id="{e045bb56-ab92-4368-867c-208ce80dc4f6}">
+      <Declaration><![CDATA[METHOD Start 
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF GVL.g_bStartButton THEN
+	GVL.g_bAlarmLamp := FALSE;
+	eState:= E_MachineState.Running;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{7c6de16a-0e78-4603-8326-7953bce89fe7}">
+      <Declaration><![CDATA[METHOD Stop]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF GVL.g_bStopButton THEN
+	eState:= E_MachineState.Stopped;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_BottleFillingMachine">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BottleFillingMachine.Execute">
+      <LineId Id="1111" Count="184" />
+      <LineId Id="1297" Count="1" />
+      <LineId Id="1341" Count="21" />
+      <LineId Id="1364" Count="0" />
+      <LineId Id="1366" Count="0" />
+      <LineId Id="1368" Count="3" />
+      <LineId Id="1321" Count="19" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BottleFillingMachine.SelectMode">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BottleFillingMachine.Start">
+      <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="8" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_BottleFillingMachine.Stop">
+      <LineId Id="7" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
