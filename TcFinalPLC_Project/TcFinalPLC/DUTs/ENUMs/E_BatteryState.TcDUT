@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="E_BatteryState" Id="{72c7e4ad-49f3-479c-a00e-cd1e4d6d88c7}">
+    <Declaration><![CDATA[TYPE E_BatteryState :
+(
+    Idle,
+    Charging,
+    Discharging,
+    Full,
+    Low
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

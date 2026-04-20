@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <GVL Name="GVL_System" Id="{9f6b7c49-5d90-4140-8eae-0ed094542c31}">
+    <Declaration><![CDATA[VAR_GLOBAL
+
+stGeneration : ST_EnergyGeneration;
+stBattery : ST_BatteryData;
+stLoad : ST_LoadData;
+stGrid : ST_GridData;
+stSensor : ST_SensorData := (
+    eWeather := E_Weather.Sunny,
+    eDayPhase := E_DayPhase.Morning,
+    bEmergencyStop := FALSE
+);
+stAlarm : ST_AlarmData;
+eSystemState : E_SystemState := E_SystemState.Idle;
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

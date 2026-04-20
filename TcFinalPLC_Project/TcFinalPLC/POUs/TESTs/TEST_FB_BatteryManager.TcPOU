@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="TEST_FB_BatteryManager" Id="{b97adb37-5653-4b77-a707-cc5d61bfa81f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK TEST_FB_BatteryManager EXTENDS TcUnit.FB_TestSuite
+VAR
+    fbBattery : FB_BatteryManager;
+    rLevel : REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[BatteryChargeIncrease();
+BatteryDischargeDecrease();
+BatteryMaxLimit();
+BatteryMinLimit();]]></ST>
+    </Implementation>
+    <Method Name="BatteryChargeIncrease" Id="{257aaeb3-e36c-4069-806f-420b37d2fa55}">
+      <Declaration><![CDATA[METHOD BatteryChargeIncrease
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('BatteryChargeIncrease');
+fbBattery.Charge(100);
+rLevel := fbBattery.GetLevel();
+AssertTrue(
+    Condition := rLevel >= 50,
+    Message := 'Battery SOC should increase after charging'
+);
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="BatteryDischargeDecrease" Id="{d366e798-cf20-46ef-98ca-fe7a02d4a79e}">
+      <Declaration><![CDATA[METHOD BatteryDischargeDecrease
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('BatteryDischargeDecrease');
+fbBattery.Discharge(100);
+rLevel := fbBattery.GetLevel();
+AssertTrue(
+    Condition := rLevel >= 50,
+    Message := 'Battery SOC should increase after charging'
+);
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="BatteryMaxLimit" Id="{b80f9ddb-6efc-427e-bf0a-34c9acd11f2e}">
+      <Declaration><![CDATA[METHOD BatteryMaxLimit
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('BatteryMaxLimit');
+fbBattery.Charge(2000);
+rLevel := fbBattery.GetLevel();
+AssertTrue(
+    Condition := rLevel <= GVL_Config.cBatteryMax,
+    Message := 'Battery must not exceed maximum SOC'
+);
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="BatteryMinLimit" Id="{42e95fd1-04c1-4f17-a1be-2bff6dc110d6}">
+      <Declaration><![CDATA[METHOD BatteryMinLimit]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('BatteryMinLimit');
+fbBattery.Discharge(2000);
+rLevel := fbBattery.GetLevel();
+AssertTrue(
+    Condition := rLevel >= GVL_Config.cBatteryMin,
+    Message := 'Battery must not go below minimum SOC'
+);
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="TEST_FB_BatteryManager">
+      <LineId Id="9" Count="0" />
+      <LineId Id="14" Count="2" />
+    </LineIds>
+    <LineIds Name="TEST_FB_BatteryManager.BatteryChargeIncrease">
+      <LineId Id="33" Count="6" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="TEST_FB_BatteryManager.BatteryDischargeDecrease">
+      <LineId Id="6" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="24" Count="3" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="TEST_FB_BatteryManager.BatteryMaxLimit">
+      <LineId Id="6" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="3" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="TEST_FB_BatteryManager.BatteryMinLimit">
+      <LineId Id="6" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="3" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

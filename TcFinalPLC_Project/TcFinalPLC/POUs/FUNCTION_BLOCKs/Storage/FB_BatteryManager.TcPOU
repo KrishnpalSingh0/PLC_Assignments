@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_BatteryManager" Id="{f43afb31-b2de-4d97-b964-27d4b82385dd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_BatteryManager IMPLEMENTS I_EnergyStorage
+VAR
+    rBattery : REAL := 50;            (* SOC % *)
+
+    rChargeRate : REAL;
+    rDischargeRate : REAL;
+
+    rGeneration : REAL;
+    rLoadDiff : REAL;
+
+    tBatteryUpdate : TON;             (* ramp timer *)
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Charge" Id="{d57f7a2c-81e9-4ba9-8b85-d69a82f79ca2}">
+      <Declaration><![CDATA[METHOD Charge 
+VAR_INPUT
+	rEnergy	: REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[tBatteryUpdate(IN := TRUE , PT := T#1S);
+IF tBatteryUpdate.Q THEN
+    IF rBattery < GVL_Config.cBatteryMax THEN
+        rBattery := rBattery + (rEnergy * 0.1);
+        GVL_System.stBattery.eBatteryState := E_BatteryState.Charging;
+        GVL_HMI.sBatteryStatus := 'Battery Charging (Solar/Wind Surplus)';
+    ELSE
+        rBattery := GVL_Config.cBatteryMax;
+        GVL_System.stBattery.eBatteryState := E_BatteryState.Full;
+        GVL_HMI.sBatteryStatus := 'Battery Full';
+    END_IF
+    tBatteryUpdate(IN := FALSE);
+END_IF
+(* Safety limit *)
+IF rBattery > GVL_Config.cBatteryMax THEN
+    rBattery := GVL_Config.cBatteryMax;
+END_IF
+(* Update HMI *)
+GVL_System.stBattery.rBatteryLevel := rBattery;
+GVL_HMI.rBatteryLevel := rBattery;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Discharge" Id="{317c0eeb-5cfe-4951-9053-68eb6f6742cb}">
+      <Declaration><![CDATA[METHOD Discharge
+VAR_INPUT
+	rEnergy	: REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[tBatteryUpdate(IN := TRUE , PT := T#1S);
+IF tBatteryUpdate.Q THEN
+    IF rBattery > GVL_Config.cBatteryMin THEN
+        rBattery := rBattery - (rEnergy * 0.1);
+        GVL_System.stBattery.eBatteryState := E_BatteryState.Discharging;
+        GVL_HMI.sBatteryStatus := 'Battery Supplying Load';
+    ELSE
+        rBattery := GVL_Config.cBatteryMin;
+        GVL_System.stBattery.eBatteryState := E_BatteryState.Low;
+        GVL_HMI.sBatteryStatus := 'Battery Low - Grid Required';
+    END_IF
+    tBatteryUpdate(IN := FALSE);
+END_IF
+(* Safety limit *)
+IF rBattery < GVL_Config.cBatteryMin THEN
+    rBattery := GVL_Config.cBatteryMin;
+END_IF
+(* Update HMI *)
+GVL_System.stBattery.rBatteryLevel := rBattery;
+GVL_HMI.rBatteryLevel := rBattery;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetLevel" Id="{f63cdb7e-7a84-4aea-beea-865ff4423f2d}">
+      <Declaration><![CDATA[METHOD GetLevel : REAL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetLevel := rBattery;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_BatteryManager">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BatteryManager.Charge">
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="35" Count="2" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BatteryManager.Discharge">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="24" Count="1" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="36" Count="2" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_BatteryManager.GetLevel">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

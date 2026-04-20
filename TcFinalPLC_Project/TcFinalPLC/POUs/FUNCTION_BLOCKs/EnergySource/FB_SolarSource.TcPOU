@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_SolarSource" Id="{de661c8d-ac9c-4b7c-8c7e-fecd26ab8d7c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SolarSource IMPLEMENTS I_EnergySource
+VAR
+    rPower : REAL;          (* current solar power *)
+    rTargetPower : REAL;    (* target power based on day phase *)
+    rStep : REAL := 1.0;    (* smooth ramp step *)
+
+    tUpdate : TON;          (* solar update timer *)
+    tDayTimer : TON;        (* day phase change timer *)
+
+    rBasePower : REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetPower" Id="{eb715660-2b8b-40ed-af1f-59e71e727bdd}">
+      <Declaration><![CDATA[METHOD GetPower : REAL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Day Phase Simulation 
+tDayTimer(IN := TRUE, PT := GVL_Config.cSimulationTime);
+IF tDayTimer.Q THEN
+    CASE GVL_System.stSensor.eDayPhase OF
+        Night :
+            GVL_System.stSensor.eDayPhase := Morning;
+        Morning :
+            GVL_System.stSensor.eDayPhase := Noon;
+        Noon :
+            GVL_System.stSensor.eDayPhase := Evening;
+        Evening :
+            GVL_System.stSensor.eDayPhase := Night;
+    END_CASE
+    (* reset timer *)
+    tDayTimer(IN := FALSE);
+END_IF
+// Decide Target Solar Power 
+CASE GVL_System.stSensor.eDayPhase OF
+    Morning :
+        rTargetPower := GVL_Config.cMaxSolarPower * 0.4;
+    Noon :
+        rTargetPower := GVL_Config.cMaxSolarPower;
+    Evening :
+        rTargetPower := GVL_Config.cMaxSolarPower * 0.5;
+    Night :
+        rTargetPower := 0;
+END_CASE
+// Smooth Solar Ramp 
+tUpdate(IN := TRUE, PT := GVL_Config.cSolarUpdateTime);
+IF tUpdate.Q THEN
+    (* agar current power target se kam hai *)
+    IF rPower < rTargetPower THEN
+        rPower := rPower + rStep;
+        IF rPower > rTargetPower THEN
+            rPower := rTargetPower;
+        END_IF
+    (* agar current power target se zyada hai *)
+    ELSIF rPower > rTargetPower THEN
+        rPower := rPower - rStep;
+        IF rPower < rTargetPower THEN
+            rPower := rTargetPower;
+        END_IF
+    END_IF
+    (* restart timer *)
+    tUpdate(IN := FALSE);
+END_IF
+(* -------- Update HMI -------- *)
+GVL_HMI.rSolarPower := rPower;
+GVL_HMI.sSolarStatus := CONCAT('Solar Power: ', REAL_TO_STRING(rPower));
+(* return power value *)
+GetPower := rPower;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_SolarSource">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SolarSource.GetPower">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="43" Count="1" />
+      <LineId Id="46" Count="1" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="58" Count="1" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="63" Count="2" />
+      <LineId Id="67" Count="1" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="72" Count="2" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="78" Count="1" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <GVL Name="GVL_Config" Id="{41ef259f-898a-4153-84c5-ed8142b1e31c}">
+    <Declaration><![CDATA[VAR_GLOBAL CONSTANT
+
+cMaxSolarPower : REAL := 50;
+cMaxWindPower : REAL := 40;
+cMaxLoad: INT :=50;
+
+cBatteryMax : REAL := 100;
+cBatteryMin : REAL := 20;
+
+cChargeRate : REAL := 5;
+cDischargeRate : REAL := 5;
+
+cSolarUpdateTime : TIME := T#10S;
+cWindUpdateTime : TIME := T#8S;
+cLoadUpdateTime : TIME := T#12S;
+cSimulationTime : TIME := T#30S;
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

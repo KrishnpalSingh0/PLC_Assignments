@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_BatteryData" Id="{f30f92c7-d3c0-454a-91c5-a9d00932cb96}">
+    <Declaration><![CDATA[TYPE ST_BatteryData :
+STRUCT
+    rBatteryLevel : REAL;
+    eBatteryState : E_BatteryState;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

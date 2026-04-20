@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <Itf Name="I_AlarmManager" Id="{14467032-6069-4cca-8597-05de29693fd8}">
+    <Declaration><![CDATA[INTERFACE I_AlarmManager
+]]></Declaration>
+    <Method Name="CheckAlarms" Id="{aad61e1d-8ef5-49a1-9316-f8f970b9105e}">
+      <Declaration><![CDATA[METHOD CheckAlarms ]]></Declaration>
+    </Method>
+    <Method Name="ResetAlarm" Id="{8c68a256-1624-465d-91a1-d0a3d76681be}">
+      <Declaration><![CDATA[METHOD ResetAlarm
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

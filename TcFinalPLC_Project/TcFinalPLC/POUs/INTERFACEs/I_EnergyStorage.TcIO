@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <Itf Name="I_EnergyStorage" Id="{d8127973-c235-46ee-ba4d-5a69cefce441}">
+    <Declaration><![CDATA[INTERFACE I_EnergyStorage
+]]></Declaration>
+    <Method Name="Charge" Id="{f872b04f-fe03-4956-b12c-0f910e32e18c}">
+      <Declaration><![CDATA[METHOD Charge 
+VAR_INPUT
+	rEnergy : REAL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Discharge" Id="{f0a09f7e-7285-4147-9c57-6b5a98c6c322}">
+      <Declaration><![CDATA[METHOD Discharge
+VAR_INPUT
+	rEnergy : REAL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetLevel" Id="{8c48f976-2adf-47a5-8914-3b88203bdbd8}">
+      <Declaration><![CDATA[METHOD GetLevel : REAL
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

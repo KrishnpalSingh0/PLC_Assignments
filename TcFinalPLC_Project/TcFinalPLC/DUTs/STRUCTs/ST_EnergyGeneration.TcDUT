@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_EnergyGeneration" Id="{0a05d52a-2cbf-4b30-a616-cc6bc87c7dd5}">
+    <Declaration><![CDATA[TYPE ST_EnergyGeneration :
+STRUCT
+    rSolarPower : REAL;
+    rWindPower : REAL;
+    rTotalGeneration : REAL;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

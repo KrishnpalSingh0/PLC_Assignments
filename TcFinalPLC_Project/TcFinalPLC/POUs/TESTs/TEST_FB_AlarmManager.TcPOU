@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="TEST_FB_AlarmManager" Id="{681d1881-e2da-47ae-b36a-14ca3c31c5b4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK TEST_FB_AlarmManager EXTENDS TcUnit.FB_TestSuite
+VAR
+    fbAlarm : FB_AlarmManager;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[BatteryLowAlarm();
+]]></ST>
+    </Implementation>
+    <Method Name="BatteryLowAlarm" Id="{5e6432c6-b468-40b5-aadc-faa160358ef4}">
+      <Declaration><![CDATA[METHOD BatteryLowAlarm
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(*
+TEST('BatteryLowAlarm');
+GVL_System.stBattery.eBatteryState := Low;
+fbAlarm.CheckAlarms();
+AssertTrue(
+    Condition := fbAlarm.stAlarm.bActive,
+    Message := 'Battery low alarm should activate'
+);
+TEST_FINISHED();   *)
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="TEST_FB_AlarmManager">
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="TEST_FB_AlarmManager.BatteryLowAlarm">
+      <LineId Id="16" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="3" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

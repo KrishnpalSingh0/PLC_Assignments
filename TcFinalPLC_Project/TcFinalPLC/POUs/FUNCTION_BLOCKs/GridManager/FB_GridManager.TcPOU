@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_GridManager" Id="{a04a4619-5a42-4059-a481-d92f7c0ff752}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_GridManager IMPLEMENTS I_GridManager
+VAR
+
+stGrid : ST_GridData;
+tGridUpdate : TON;
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="DisconnectedGrid" Id="{d2a3fb12-bbf8-442f-b969-d3f782af3366}">
+      <Declaration><![CDATA[METHOD DisconnectedGrid
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[stGrid.bGridAvailable := FALSE;
+stGrid.rGridPower := 0;
+GVL_HMI.rGridPower := stGrid.rGridPower;
+GVL_HMI.sGridStatus := 'Grid Disconnected';]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetGridPower" Id="{8369e5c5-3e64-4deb-8d84-fc0f0cd4aa1a}">
+      <Declaration><![CDATA[METHOD GetGridPower : REAL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetGridPower := stGrid.rGridPower;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SupplyPower" Id="{f2a151b8-be3c-4920-be10-88bfc090579f}">
+      <Declaration><![CDATA[METHOD SupplyPower
+VAR_INPUT
+	rPowerRequired	: REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[tGridUpdate(IN := TRUE , PT := T#1S);
+IF tGridUpdate.Q THEN
+    stGrid.bGridAvailable := TRUE;
+    stGrid.rGridPower := rPowerRequired;
+    (* Update HMI *)
+    GVL_HMI.rGridPower := stGrid.rGridPower;
+    GVL_HMI.sGridStatus :=
+    CONCAT('Grid Supplying Power: ', REAL_TO_STRING(stGrid.rGridPower));
+    tGridUpdate(IN := FALSE);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_GridManager">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GridManager.DisconnectedGrid">
+      <LineId Id="11" Count="1" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GridManager.GetGridPower">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_GridManager.SupplyPower">
+      <LineId Id="21" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="25" Count="1" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

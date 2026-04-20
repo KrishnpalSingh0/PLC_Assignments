@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_SensorData" Id="{bb6d0aea-af29-4f54-9ac4-b3093b6dc217}">
+    <Declaration><![CDATA[TYPE ST_SensorData :
+STRUCT
+    eWeather : E_Weather;
+    eDayPhase : E_DayPhase;
+    bEmergencyStop : BOOL;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

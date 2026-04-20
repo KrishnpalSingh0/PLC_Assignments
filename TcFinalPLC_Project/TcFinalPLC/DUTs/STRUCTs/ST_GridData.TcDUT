@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_GridData" Id="{819c0d8d-3be4-4fcb-8aeb-b16f26db5c02}">
+    <Declaration><![CDATA[TYPE ST_GridData :
+STRUCT
+    bGridAvailable : BOOL;
+    rGridPower : REAL;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>
