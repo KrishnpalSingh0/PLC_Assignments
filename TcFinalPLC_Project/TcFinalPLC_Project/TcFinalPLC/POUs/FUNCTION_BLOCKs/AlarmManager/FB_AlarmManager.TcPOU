@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_AlarmManager" Id="{2da38f04-9fed-4f37-963b-7078cb45e119}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AlarmManager IMPLEMENTS I_AlarmManager
+VAR
+	stAlarm : ST_AlarmData;
+	tAlarmCheck : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CheckAlarms" Id="{d1c3439e-efd1-4a36-a6d3-4d75ba80e57d}">
+      <Declaration><![CDATA[METHOD CheckAlarms
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[tAlarmCheck(IN := TRUE , PT := T#1S);
+IF tAlarmCheck.Q THEN
+    (* Default State *)
+    GVL_HMI.bAlarmActive := FALSE;
+    stAlarm.eType := E_AlarmType.None;
+    stAlarm.sMessage := 'System Normal';
+    (* Battery Low Alarm *)
+    IF GVL_System.stBattery.eBatteryState = Low THEN
+        GVL_HMI.bAlarmActive  := TRUE;
+        stAlarm.eType := E_AlarmType.BatteryLow;
+        stAlarm.sMessage := 'Battery Level Critical';
+    END_IF
+    (* Battery Full Alarm *)
+    IF GVL_System.stBattery.eBatteryState = Full THEN
+        GVL_HMI.bAlarmActive  := TRUE;
+        stAlarm.eType := E_AlarmType.BatteryFull;
+        stAlarm.sMessage := 'Battery Fully Charged';
+    END_IF
+    (* Grid Failure *)
+    IF (GVL_HMI.rGridPower = GVL_Val.nDefaultNull) AND ((GVL_HMI.rSolarPower + GVL_HMI.rWindPower) < GVL_HMI.rTotalLoad) THEN
+        GVL_HMI.bAlarmActive  := TRUE;
+        stAlarm.eType := E_AlarmType.GridFailure;
+        stAlarm.sMessage := 'Grid Not Available';
+    END_IF
+    (* No Renewable Generation *)
+    IF (GVL_HMI.rSolarPower = GVL_Val.nDefaultNull) AND (GVL_HMI.rWindPower = GVL_Val.nDefaultNull) THEN
+        GVL_HMI.bAlarmActive  := TRUE;
+        stAlarm.eType := E_AlarmType.NoGeneration;
+        stAlarm.sMessage := 'No Renewable Generation';
+    END_IF
+	(* Mode Conflict*)
+	IF GVL_HMI.bAutoMode AND GVL_HMI.bManualMode THEN
+		GVL_HMI.bAlarmActive  := TRUE;
+	   	stAlarm.eType := E_AlarmType.ModeConflict;
+		GVL_HMI.sSystemState := 'Mode Error';
+		GVL_HMI.sAlarmMessage := 'Mode Conflict: Auto & Manual Active';
+   	END_IF
+    (* Emergency Fault *)
+    IF (GVL_HMI.rSolarPower < GVL_Val.nDefaultNull) OR (GVL_HMI.rWindPower < GVL_Val.nDefaultNull) THEN
+        GVL_HMI.bAlarmActive  := TRUE;
+        stAlarm.eType := E_AlarmType.Emergency;
+        stAlarm.sMessage := 'System Emergency Fault';
+    END_IF
+	(* Update HMI *)
+    GVL_HMI.sAlarmMessage := stAlarm.sMessage;
+    tAlarmCheck(IN := FALSE);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ResetAlarm" Id="{2f048eeb-ff69-4ada-b243-2f20a5550be2}">
+      <Declaration><![CDATA[METHOD ResetAlarm
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GVL_HMI.bAlarmActive := FALSE;
+stAlarm.eType := E_AlarmType.None;
+stAlarm.sMessage := 'Alarm Reset';
+GVL_HMI.sAlarmMessage := stAlarm.sMessage;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_AlarmManager">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AlarmManager.CheckAlarms">
+      <LineId Id="7" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="2" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="33" Count="2" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="45" Count="2" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="57" Count="2" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="69" Count="2" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AlarmManager.ResetAlarm">
+      <LineId Id="5" Count="2" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

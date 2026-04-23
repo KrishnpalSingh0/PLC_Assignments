@@ -1,0 +1,253 @@
+<div id="SystemStatus_1" data-tchmi-type="TcHmi.Controls.System.TcHmiContent" data-tchmi-top="0" data-tchmi-left="0" data-tchmi-width="800" data-tchmi-height="500">
+
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(222, 228, 223, 1)"
+}
+</script>
+<div id="TcHmiContainer_15" data-tchmi-type="TcHmi.Controls.System.TcHmiContainer" data-tchmi-height="415" data-tchmi-height-unit="px" data-tchmi-left="39" data-tchmi-left-unit="px" data-tchmi-top="77" data-tchmi-top-unit="px" data-tchmi-width="698" data-tchmi-width-unit="px">
+<div id="TcStatusPanelSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="41" data-tchmi-height-unit="px" data-tchmi-left="245" data-tchmi-left-unit="px" data-tchmi-text="Status Panel" data-tchmi-top="0" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(57, 139, 103, 1)"
+}
+</script>
+</div>
+<div id="TcWindStatusSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="Wind Status" data-tchmi-top="190" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+</div>
+<div id="TcSolarStatusSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="Solar Status" data-tchmi-top="149" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+</div>
+<div id="TcBatteryStateSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="Battery Status" data-tchmi-top="108" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+</div>
+<div id="TcSystemStateSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="System Status" data-tchmi-top="61" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+</div>
+<div id="TcLoadStatusSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="Load Status" data-tchmi-top="272" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+</div>
+<div id="TcDayPhaseSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="Day Phase" data-tchmi-top="231" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+</div>
+<div id="TcGridStatusSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="Grid Status" data-tchmi-top="313" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+</div>
+<div id="TcAlarmStatusSS" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="26" data-tchmi-left-unit="px" data-tchmi-text="Alarm Status" data-tchmi-top="354" data-tchmi-top-unit="px" data-tchmi-width="198" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(70, 60, 183, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+</div>
+<div id="TcSystemStateSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sSystemState%/s%" data-tchmi-top="61" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+<div id="TcBatteryStatusSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sBatteryStatus%/s%" data-tchmi-top="108" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+<div id="TcSolarStatusSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sSolarStatus%/s%" data-tchmi-top="149" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+<div id="TcWindStatusSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sWindStatus%/s%" data-tchmi-top="190" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+<div id="TcDayPhaseSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sDayPhase%/s%" data-tchmi-top="231" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+<div id="TcLoadStatusSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sLoadStatus%/s%" data-tchmi-top="272" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+<div id="TcGridStatusSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sGridStatus%/s%" data-tchmi-top="313" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+<div id="TcAlarmStatusSSTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="31" data-tchmi-height-unit="px" data-tchmi-left="329" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.sAlarmMessage%/s%" data-tchmi-top="354" data-tchmi-top-unit="px" data-tchmi-width="319" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="20">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+</div>
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(211, 133, 133, 1)"
+}
+</script>
+</div>
+<div id="TcHmiContainer_24" data-tchmi-type="TcHmi.Controls.System.TcHmiContainer" data-tchmi-height="57" data-tchmi-height-unit="px" data-tchmi-left="39" data-tchmi-left-unit="px" data-tchmi-top="10" data-tchmi-top-unit="px" data-tchmi-width="698" data-tchmi-width-unit="px">
+<div id="TcHmiTextblock_2" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="37" data-tchmi-height-unit="px" data-tchmi-left="238" data-tchmi-left-unit="px" data-tchmi-text="System Overview" data-tchmi-top="10" data-tchmi-top-unit="px" data-tchmi-width="218" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-font-size="24" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center">
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(57, 139, 103, 1)"
+}
+</script>
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(248, 248, 250, 1)"
+}
+</script>
+</div>
+
+<script data-tchmi-target-attribute="data-tchmi-background-color" type="application/json">
+{
+  "color": "rgba(211, 133, 133, 1)"
+}
+</script>
+</div>
+</div>

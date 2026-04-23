@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_SolarSource" Id="{de661c8d-ac9c-4b7c-8c7e-fecd26ab8d7c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SolarSource IMPLEMENTS I_EnergySource
+VAR
+    rPower : REAL;          (* current solar power *)
+    rTargetPower : REAL;    (* target power based on day phase *)
+    tUpdate : TON;          (* solar update timer *)
+    tDayTimer : TON;        (* day phase change timer *)
+    rBasePower : REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetPower" Id="{eb715660-2b8b-40ed-af1f-59e71e727bdd}">
+      <Declaration><![CDATA[METHOD GetPower : REAL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF GVL_HMI.rTemperature <= GVL_Val.rMorningTemp THEN
+    GVL_System.stSensor.eDayPhase := Morning;
+	GVL_HMI.sDayPhase :='Morning';
+ELSIF GVL_HMI.rTemperature <= GVL_Val.rNoonTemp THEN
+    GVL_System.stSensor.eDayPhase := Noon;
+	GVL_HMI.sDayPhase :='Noon';
+ELSIF GVL_HMI.rTemperature <= GVL_Val.rEveningTemp THEN
+    GVL_System.stSensor.eDayPhase := Evening;
+	GVL_HMI.sDayPhase :='Evening';
+ELSE
+    GVL_System.stSensor.eDayPhase := Night;
+	GVL_HMI.sDayPhase :='Night';
+END_IF
+CASE GVL_System.stSensor.eDayPhase OF
+	Morning : rTargetPower := GVL_Config.cMaxSolarPower * GVL_Val.rMrnWeekSunlight;
+	Noon : rTargetPower := GVL_Config.cMaxSolarPower;
+	Evening : rTargetPower := GVL_Config.cMaxSolarPower * GVL_Val.rEvnWeekSunlight;
+	Night : rTargetPower := GVL_Val.nDefaultNull;
+END_CASE
+tUpdate(IN := TRUE , PT := GVL_Config.cSolarUpdateTime);
+IF tUpdate.Q THEN
+    IF rPower < rTargetPower THEN
+        rPower := rPower + GVL_Val.rSolarStep;
+    ELSIF rPower > rTargetPower THEN
+        rPower := rPower - GVL_Val.rSolarStep;
+    END_IF
+    tUpdate(IN := FALSE);
+END_IF
+GVL_HMI.rSolarPower := rPower;
+IF GVL_System.stSensor.eDayPhase = Night THEN
+    GVL_HMI.sSolarStatus := 'Solar Offline (Night)';
+
+ELSIF rPower >= GVL_Config.cMaxSolarPower * GVL_Val.rSolarPeek THEN
+    GVL_HMI.sSolarStatus := 'Solar Peak Generation';
+
+ELSIF rPower >= GVL_Config.cMaxSolarPower * GVL_VAl.rMrnWeekSunlight THEN
+    GVL_HMI.sSolarStatus := 'Solar Generating Normally';
+ELSIF rPower > GVL_Val.nDefaultNull THEN
+    GVL_HMI.sSolarStatus := 'Low Solar Generation';
+ELSE
+    GVL_HMI.sSolarStatus := 'Solar Not Generating';
+END_IF
+GetPower := rPower;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_SolarSource">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SolarSource.GetPower">
+      <LineId Id="98" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="101" Count="1" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="107" Count="1" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="133" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="137" Count="4" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="159" Count="7" />
+      <LineId Id="168" Count="1" />
+      <LineId Id="171" Count="1" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

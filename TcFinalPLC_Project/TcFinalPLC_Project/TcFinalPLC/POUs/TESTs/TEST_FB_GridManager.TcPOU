@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="TEST_FB_GridManager" Id="{c2b291db-3d69-409a-8606-14f87e199d94}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK TEST_FB_GridManager EXTENDS TcUnit.FB_TestSuite
+VAR
+    fbGrid : FB_GridManager;
+    rPower : REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[GridDisconnect();
+
+]]></ST>
+    </Implementation>
+    <Method Name="GridDisconnect" Id="{b17df969-90ee-48fa-b05b-f1701192d86d}">
+      <Declaration><![CDATA[METHOD GridDisconnect]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TEST('GridDisconnect');
+fbGrid.DisconnectedGrid();
+rPower := fbGrid.GetGridPower();
+AssertEquals_REAL(
+    Expected := GVL_Val.nDefaultNull,
+    Actual := rPower,
+    Delta := 0.01,
+    Message := 'Grid power should be zero after disconnect'
+);
+TEST_FINISHED();]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="TEST_FB_GridManager">
+      <LineId Id="9" Count="0" />
+      <LineId Id="15" Count="1" />
+    </LineIds>
+    <LineIds Name="TEST_FB_GridManager.GridDisconnect">
+      <LineId Id="6" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="5" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
