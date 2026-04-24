@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <Itf Name="I_EnergySource" Id="{10273e1d-355d-4617-9c31-4122d6ff8f46}">
+    <Declaration><![CDATA[INTERFACE I_EnergySource
+]]></Declaration>
+    <Method Name="GetPower" Id="{b63b09d9-2a56-4da4-84a9-9ffccea2cad7}">
+      <Declaration><![CDATA[METHOD GetPower : REAL
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

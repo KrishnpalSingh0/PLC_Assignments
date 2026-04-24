@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="E_Weather" Id="{fdaece74-1b30-40eb-9625-def145ff80e3}">
+    <Declaration><![CDATA[TYPE E_Weather :
+(
+    Sunny,
+    Cloudy,
+    Rainy,
+    Windy,
+    Storm
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

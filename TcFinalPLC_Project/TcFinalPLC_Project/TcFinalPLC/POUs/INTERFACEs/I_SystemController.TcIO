@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <Itf Name="I_SystemController" Id="{12214820-da5e-4b99-aef4-857a1f01232e}">
+    <Declaration><![CDATA[INTERFACE I_SystemController
+]]></Declaration>
+    <Method Name="ExecuteCycle" Id="{6d81ca55-367f-41d6-9c42-1975b430add6}">
+      <Declaration><![CDATA[METHOD ExecuteCycle
+]]></Declaration>
+    </Method>
+    <Method Name="ResetSystem" Id="{f14cbefc-5d23-4f6f-8b74-df5d5f88c7b0}">
+      <Declaration><![CDATA[METHOD ResetSystem
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="StartSystem" Id="{3778cc4d-5fda-4f7b-9603-f9fa0b106515}">
+      <Declaration><![CDATA[METHOD StartSystem]]></Declaration>
+    </Method>
+    <Method Name="StopSystem" Id="{929e9880-55df-427d-aa52-e3d614227003}">
+      <Declaration><![CDATA[METHOD StopSystem
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

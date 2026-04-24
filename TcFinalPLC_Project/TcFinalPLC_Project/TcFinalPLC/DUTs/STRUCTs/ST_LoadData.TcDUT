@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="ST_LoadData" Id="{5d8e0c33-c83c-47dd-b6f1-a5337f08c07c}">
+    <Declaration><![CDATA[TYPE ST_LoadData  :
+STRUCT
+	rCriticalLoad : REAL;
+    rImportantLoad : REAL;
+    rNonCriticalLoad : REAL;
+    rTotalLoad : REAL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

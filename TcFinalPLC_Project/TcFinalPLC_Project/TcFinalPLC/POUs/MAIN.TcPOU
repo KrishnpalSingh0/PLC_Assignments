@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="MAIN" Id="{bd1d28dd-26f5-431c-a0e2-298491b67956}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fbSystemController : FB_SystemController;
+	iSystemController  : I_SystemController;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[iSystemController := fbSystemController;
+iSystemController.ExecuteCycle();
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="74" Count="0" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="67" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

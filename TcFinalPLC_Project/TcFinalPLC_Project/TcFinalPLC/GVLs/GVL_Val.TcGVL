@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <GVL Name="GVL_Val" Id="{2731dd84-da62-45ee-8731-aa1d8bd26816}">
+    <Declaration><![CDATA[VAR_GLOBAL
+
+	nDefaultNull: INT := 0;
+	nDefSingle : INT := 1;
+	
+	rMorningTemp : REAL := 23.0;
+	rNoonTemp : REAL := 27.0;
+	rEveningTemp : REAL := 31.0;
+	rMrnWeekSunlight : REAL := 0.4;
+	rEvnWeekSunlight : REAL := 0.5;
+	rSolarPeek : REAL := 0.9;
+	rSolarStep : REAL := 1.0;    
+	rScaleVal : REAL := 10.0;
+	
+	nWindMod : INT := 250;
+	rWindStep : REAL := 1.5;
+	rWindSunSpeed : REAL := 0.7;
+	rWindCloudSpeed : REAL := 0.9;
+	rWindRainSpeed : REAL := 1.0;
+	rWindWindySpeed : REAL := 1.3;
+	rWindStromSpeed : REAL := 1.6;
+	nWindDefMaxSpeed : INT := 25;
+	nWindDefMinSpeed : INT := 3;
+	nWindDefMidSpeed : INT := 8;
+	nWindDefMidMaxSpeed : INT := 12;
+	nWindModVal : INT := 5;
+	nWindRampRange : INT := 4;
+	rWindScaleVal : REAL := 0.5;
+	rWindMaxScalVal : REAL := 0.4;
+	
+	nLoadStepMax : INT := 4;
+	
+	nMorningCriticalLoadBase : REAL := 10;
+	nMorningImportantLoadBase : REAL := 12;
+	nMorningNonCriticalLoadBase : REAL := 8;
+	
+	nNoonCriticalLoadBase : REAL := 12;
+	nNoonImportantLoadBase : REAL := 15;
+	nNoonNonCriticalLoadBase : REAL := 10;
+	
+	nEveningCriticalLoadBase : REAL := 15;
+	nEveningImportantLoadBase : REAL := 18;
+	nEveningNonCriticalLoadBase : REAL := 12;
+	
+	nNightCriticalLoadBase : REAL := 8;
+	nNightImportantLoadBase : REAL := 10;
+	nNightNonCriticalLoadBase : REAL := 5;
+	
+	rImportantLoadSheddingFactor : REAL := 0.5;
+	rBatteryChargeFactor : REAL := 0.1;
+	
+	rManualChargePower : REAL := 5.0;
+	rManualDischargePower : REAL := 5.0;
+	
+	rBatterySupportThreshold : REAL := 25.0;
+	rBatteryCriticalLevel : REAL := 10.0;
+	rBatteryRecoveryLevel : REAL := 30.0;
+	rBatteryEmergencyLevel : REAL := 5.0;
+END_VAR
+
+VAR_GLOBAL PERSISTENT
+    rBatteryLevel : REAL := 50.0;
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

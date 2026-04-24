@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="E_SystemState" Id="{fd4347f0-5b11-4dc4-88d6-2b8f202a27a3}">
+    <Declaration><![CDATA[TYPE E_SystemState :
+(
+    Idle,
+    StartUp,
+    NormalOperation,
+    SurplusEnergy,
+    BatterySupport,
+    GridSupport,
+    LoadShedding,
+    AlarmState,
+    Stop,
+    SafeState
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

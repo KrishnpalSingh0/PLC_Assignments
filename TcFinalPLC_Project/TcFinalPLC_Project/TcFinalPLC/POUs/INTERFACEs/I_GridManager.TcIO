@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <Itf Name="I_GridManager" Id="{91a01b89-5027-46ff-927c-a55ae7dda32c}">
+    <Declaration><![CDATA[INTERFACE I_GridManager
+]]></Declaration>
+    <Method Name="DisconnectedGrid" Id="{0d7b424c-2d23-4d88-ba65-a0d3557e5740}">
+      <Declaration><![CDATA[METHOD DisconnectedGrid]]></Declaration>
+    </Method>
+    <Method Name="GetGridPower" Id="{8049e64c-0949-4e57-a98a-e7241bd07333}">
+      <Declaration><![CDATA[METHOD GetGridPower  : REAL
+]]></Declaration>
+    </Method>
+    <Method Name="SupplyPower" Id="{1c72d3e8-19fc-4820-92c9-ac87421d0bbf}">
+      <Declaration><![CDATA[METHOD SupplyPower
+VAR_INPUT
+    rPowerRequired : REAL;
+END_VAR
+
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

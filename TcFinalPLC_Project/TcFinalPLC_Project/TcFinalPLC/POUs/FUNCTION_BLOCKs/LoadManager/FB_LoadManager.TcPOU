@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <POU Name="FB_LoadManager" Id="{ec36367a-dbc8-4d66-97b7-8a2fd5f11cfb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LoadManager IMPLEMENTS I_LoadController
+VAR
+stLoad : ST_LoadData;
+bLoadShedding : BOOL;
+tLoadUpdate : TON;
+rStep : REAL := GVL_Val.nDefaultNull;
+bIncrease : BOOL := TRUE;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetLoad" Id="{249fde92-1003-45c9-a772-121a602a79a2}">
+      <Declaration><![CDATA[METHOD GetLoad : REAL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[tLoadUpdate(IN := TRUE , PT := T#2S);
+IF tLoadUpdate.Q THEN
+    IF bIncrease THEN
+        rStep := rStep + GVL_Val.nDefSingle;
+        IF rStep >= GVL_Val.nLoadStepMax THEN
+            bIncrease := FALSE;
+        END_IF
+    ELSE
+        rStep := rStep - GVL_Val.nDefSingle;
+        IF rStep <= GVL_Val.nDefaultNull THEN
+            bIncrease := TRUE;
+        END_IF
+    END_IF
+    CASE GVL_System.stSensor.eDayPhase OF
+        Morning :
+            stLoad.rCriticalLoad := GVL_Val.nMorningCriticalLoadBase + rStep;
+            stLoad.rImportantLoad := GVL_Val.nMorningImportantLoadBase + rStep;
+            stLoad.rNonCriticalLoad := GVL_Val.nMorningNonCriticalLoadBase + rStep;
+        Noon :
+            stLoad.rCriticalLoad := GVL_Val.nNoonCriticalLoadBase + rStep;
+            stLoad.rImportantLoad := GVL_Val.nNoonImportantLoadBase + rStep;
+            stLoad.rNonCriticalLoad := GVL_Val.nNoonNonCriticalLoadBase + rStep;
+        Evening :
+            stLoad.rCriticalLoad := GVL_Val.nEveningCriticalLoadBase + rStep;
+            stLoad.rImportantLoad := GVL_Val.nEveningImportantLoadBase + rStep;
+            stLoad.rNonCriticalLoad := GVL_Val.nEveningNonCriticalLoadBase + rStep;
+        Night :
+            stLoad.rCriticalLoad := GVL_Val.nNightCriticalLoadBase + rStep;
+            stLoad.rImportantLoad := GVL_Val.nNightImportantLoadBase + rStep;
+            stLoad.rNonCriticalLoad := GVL_Val.nNightNonCriticalLoadBase + rStep;
+    END_CASE
+    tLoadUpdate(IN := FALSE);
+END_IF
+stLoad.rTotalLoad := stLoad.rCriticalLoad + stLoad.rImportantLoad + stLoad.rNonCriticalLoad;
+GVL_HMI.rTotalLoad := stLoad.rTotalLoad;
+IF GVL_HMI.bManualMode THEN
+    IF GVL_HMI.bManualLoadShedding THEN
+        GVL_HMI.sLoadStatus := 'Manual Load Shedding Active';
+    ELSE
+        GVL_HMI.sLoadStatus := 'Manual Mode - All Loads Connected';
+    END_IF
+ELSIF GVL_HMI.bAutoMode THEN
+    GVL_HMI.sLoadStatus := 'Auto Load Management Active';
+ELSE
+    GVL_HMI.sLoadStatus := 'Load System Idle';
+END_IF
+GetLoad := stLoad.rTotalLoad;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RestoreLoad" Id="{37fe468a-e5f0-426d-9530-d83576400798}">
+      <Declaration><![CDATA[METHOD RestoreLoad
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE GVL_System.stSensor.eDayPhase OF
+    Morning :
+        stLoad.rNonCriticalLoad := GVL_Val.nMorningNonCriticalLoadBase;
+    Noon :
+        stLoad.rNonCriticalLoad := GVL_Val.nNoonNonCriticalLoadBase;
+    Evening :
+        stLoad.rNonCriticalLoad := GVL_Val.nEveningNonCriticalLoadBase;
+    Night :
+        stLoad.rNonCriticalLoad := GVL_Val.nNightNonCriticalLoadBase;
+END_CASE
+stLoad.rTotalLoad := stLoad.rCriticalLoad + stLoad.rImportantLoad + stLoad.rNonCriticalLoad;
+GVL_HMI.sLoadStatus := 'Load Restored';
+GVL_HMI.rTotalLoad := stLoad.rTotalLoad;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ShedLoad" Id="{103c0273-b061-4fc9-8157-5d74b05129c1}">
+      <Declaration><![CDATA[METHOD ShedLoad
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF stLoad.rNonCriticalLoad > GVL_Val.nDefaultNull THEN
+    stLoad.rNonCriticalLoad := GVL_Val.nDefaultNull;
+ELSIF stLoad.rImportantLoad > GVL_Val.nDefaultNull THEN
+    stLoad.rImportantLoad := stLoad.rImportantLoad * GVL_Val.rImportantLoadSheddingFactor;
+END_IF
+stLoad.rTotalLoad := stLoad.rCriticalLoad + stLoad.rImportantLoad + stLoad.rNonCriticalLoad;
+GVL_HMI.sLoadStatus := 'Load Shedding Activated';
+GVL_HMI.rTotalLoad := stLoad.rTotalLoad;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_LoadManager">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_LoadManager.GetLoad">
+      <LineId Id="125" Count="0" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="130" Count="10" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="145" Count="3" />
+      <LineId Id="150" Count="3" />
+      <LineId Id="155" Count="3" />
+      <LineId Id="160" Count="3" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="184" Count="0" />
+      <LineId Id="186" Count="4" />
+      <LineId Id="192" Count="0" />
+      <LineId Id="194" Count="0" />
+      <LineId Id="196" Count="0" />
+      <LineId Id="198" Count="0" />
+      <LineId Id="200" Count="0" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_LoadManager.RestoreLoad">
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_LoadManager.ShedLoad">
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

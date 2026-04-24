@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <DUT Name="E_AlarmType" Id="{fb3b0969-3ea3-4960-b71b-735df50e419a}">
+    <Declaration><![CDATA[TYPE E_AlarmType :
+(
+    None,
+    BatteryLow,
+    BatteryFull,
+    GridFailure,
+    NoGeneration,
+	ModeConflict,
+    Emergency
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

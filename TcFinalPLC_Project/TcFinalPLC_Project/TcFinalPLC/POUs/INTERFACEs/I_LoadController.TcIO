@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.16">
+  <Itf Name="I_LoadController" Id="{e981e0e8-1158-4350-99c2-3b282e1f6330}">
+    <Declaration><![CDATA[INTERFACE I_LoadController
+]]></Declaration>
+    <Method Name="GetLoad" Id="{da5a0cb9-01d5-48a7-989d-338eaf769e94}">
+      <Declaration><![CDATA[METHOD GetLoad : REAL
+]]></Declaration>
+    </Method>
+    <Method Name="RestoreLoad" Id="{bb633029-8385-4fb5-93a2-e2dbd34f5c0f}">
+      <Declaration><![CDATA[METHOD RestoreLoad
+]]></Declaration>
+    </Method>
+    <Method Name="ShedLoad" Id="{1cd81629-ac95-4414-8f2a-89c58a5fdf64}">
+      <Declaration><![CDATA[METHOD ShedLoad
+
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>
