@@ -226,7 +226,7 @@
 }
 </script>
 </div>
-<div id="TcSolarPowerTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="173" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.rSolarPower%/s%" data-tchmi-top="46" data-tchmi-top-unit="px" data-tchmi-width="242" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
+<div id="TcSolarPowerTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="173" data-tchmi-left-unit="px" data-tchmi-text="%f%%s%PLC1.GVL_HMI.rSolarPower%/s%.toFixed(2)%/f%" data-tchmi-top="46" data-tchmi-top-unit="px" data-tchmi-width="242" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
 <script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
 {
   "top": 3,
@@ -248,7 +248,7 @@
 </script>
 
 </div>
-<div id="TcBatteryLevelTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="173" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.rBatteryLevel%/s%" data-tchmi-top="118" data-tchmi-top-unit="px" data-tchmi-width="242" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
+<div id="TcBatteryLevelTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="173" data-tchmi-left-unit="px" data-tchmi-text="%f%%s%PLC1.GVL_HMI.rBatteryLevel%/s%.toFixed(2)%/f%" data-tchmi-top="118" data-tchmi-top-unit="px" data-tchmi-width="242" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
 <script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
 {
   "top": 3,
@@ -270,7 +270,7 @@
 </script>
 
 </div>
-<div id="TcWindPowerTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="173" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.rWindPower%/s%" data-tchmi-top="82" data-tchmi-top-unit="px" data-tchmi-width="242" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
+<div id="TcWindPowerTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="173" data-tchmi-left-unit="px" data-tchmi-text="%f%%s%PLC1.GVL_HMI.rWindPower%/s%.toFixed(2)%/f%" data-tchmi-top="82" data-tchmi-top-unit="px" data-tchmi-width="242" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
 <script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
 {
   "top": 3,
@@ -281,7 +281,7 @@
 </script>
 
 </div>
-<div id="TcPowerGenerationTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="569" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_HMI.rTotalGeneration%/s%" data-tchmi-top="118" data-tchmi-top-unit="px" data-tchmi-width="200" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
+<div id="TcPowerGenerationTextbox" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="29" data-tchmi-height-unit="px" data-tchmi-left="569" data-tchmi-left-unit="px" data-tchmi-text="%f%%s%PLC1.GVL_HMI.rTotalGeneration%/s%.toFixed(2)%/f%" data-tchmi-top="118" data-tchmi-top-unit="px" data-tchmi-width="200" data-tchmi-width-unit="px" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-font-size="17">
 <script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
 {
   "top": 3,
@@ -359,7 +359,7 @@
               {
                 "compare1": {
                   "objectType": "Symbol",
-                  "valueType": "tchmi:general#/definitions/String",
+                  "valueType": "tchmi:general#/definitions/BOOL",
                   "symbolExpression": "%s%PLC1.GVL_HMI.bAlarmActive%/s%"
                 },
                 "compare2": {
@@ -397,7 +397,7 @@
                   "objectType": "StaticValue",
                   "valueType": "tchmi:framework#/definitions/Color",
                   "value": {
-                    "color": "rgba(76, 228, 14, 1)"
+                    "color": "rgba(223, 228, 221, 1)"
                   }
                 },
                 "asyncWait": true
@@ -675,17 +675,6 @@
               {
                 "objectType": "WriteToSymbol",
                 "active": true,
-                "symbolExpression": "%s%PLC1.GVL_HMI.bStart%/s%",
-                "value": {
-                  "objectType": "StaticValue",
-                  "valueType": "tchmi:general#/definitions/BOOL",
-                  "value": false
-                },
-                "asyncWait": true
-              },
-              {
-                "objectType": "WriteToSymbol",
-                "active": true,
                 "symbolExpression": "%s%PLC1.GVL_HMI.bReset%/s%",
                 "value": {
                   "objectType": "StaticValue",
@@ -697,20 +686,18 @@
               {
                 "objectType": "WriteToSymbol",
                 "active": true,
-                "symbolExpression": "%ctrl%TcStartGreen::FillColor%/ctrl%",
+                "symbolExpression": "%s%PLC1.GVL_HMI.bStart%/s%",
                 "value": {
                   "objectType": "StaticValue",
-                  "valueType": "tchmi:framework#/definitions/Color",
-                  "value": {
-                    "color": "rgba(222, 228, 223, 1)"
-                  }
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": false
                 },
                 "asyncWait": true
               },
               {
                 "objectType": "WriteToSymbol",
                 "active": true,
-                "symbolExpression": "%ctrl%TcResetGreen::FillColor%/ctrl%",
+                "symbolExpression": "%ctrl%TcStartGreen::FillColor%/ctrl%",
                 "value": {
                   "objectType": "StaticValue",
                   "valueType": "tchmi:framework#/definitions/Color",
@@ -737,6 +724,89 @@
                 "objectType": "WriteToSymbol",
                 "active": true,
                 "symbolExpression": "%ctrl%TcManualGreen::FillColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(222, 228, 223, 1)"
+                  }
+                },
+                "asyncWait": true
+              },
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_HMI.bManualCharge%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": false
+                },
+                "asyncWait": true
+              },
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcManualBatteryChargeGreen::FillColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(223, 228, 221, 1)"
+                  }
+                },
+                "asyncWait": true
+              },
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_HMI.bManualDischarge%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": false
+                },
+                "asyncWait": true
+              },
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcManualBatteryDischargeGreen::FillColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(223, 228, 221, 1)"
+                  }
+                },
+                "asyncWait": true
+              },
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_HMI.bAutoMode%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": false
+                },
+                "asyncWait": true
+              },
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_HMI.bManualMode%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": false
+                },
+                "asyncWait": true
+              },
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcResetGreen::FillColor%/ctrl%",
                 "value": {
                   "objectType": "StaticValue",
                   "valueType": "tchmi:framework#/definitions/Color",

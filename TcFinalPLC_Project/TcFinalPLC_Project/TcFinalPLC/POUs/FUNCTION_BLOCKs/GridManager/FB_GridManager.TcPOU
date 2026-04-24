@@ -40,8 +40,7 @@ IF tGridUpdate.Q THEN
     stGrid.bGridAvailable := TRUE;
     stGrid.rGridPower := rPowerRequired;
     GVL_HMI.rGridPower := stGrid.rGridPower;
-    GVL_HMI.sGridStatus :=
-    CONCAT('Grid Supplying Power: ', REAL_TO_STRING(stGrid.rGridPower));
+    GVL_HMI.sGridStatus := CONCAT('Grid Supplying Power: ', REAL_TO_STRING(stGrid.rGridPower));
     tGridUpdate(IN := FALSE);
 END_IF]]></ST>
       </Implementation>
@@ -62,7 +61,7 @@ END_IF]]></ST>
       <LineId Id="23" Count="0" />
       <LineId Id="25" Count="1" />
       <LineId Id="30" Count="0" />
-      <LineId Id="32" Count="1" />
+      <LineId Id="32" Count="0" />
       <LineId Id="35" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>

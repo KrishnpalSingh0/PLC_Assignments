@@ -4,14 +4,17 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	fbSystemController : FB_SystemController;
+	iSystemController  : I_SystemController;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbSystemController.ExecuteCycle();
+      <ST><![CDATA[iSystemController := fbSystemController;
+iSystemController.ExecuteCycle();
 
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
+      <LineId Id="74" Count="0" />
       <LineId Id="55" Count="0" />
       <LineId Id="67" Count="1" />
     </LineIds>

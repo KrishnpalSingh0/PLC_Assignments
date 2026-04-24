@@ -9,10 +9,7 @@ bReset : BOOL := FALSE;
 
 bAutoMode : BOOL := FALSE;
 bManualMode : BOOL := FALSE;
-bDashboard : BOOL := FALSE;
-bEnergy : BOOL := FALSE;
-
-bManualLoadShedding : BOOL;
+bManualLoadShedding : BOOL := FALSE;
 
 (* values shown on HMI *)
 rSolarPower : REAL;

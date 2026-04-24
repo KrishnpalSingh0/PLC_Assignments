@@ -68,13 +68,14 @@ IF GVL_HMI.bStop THEN
 END_IF
 IF GVL_HMI.bReset THEN
     ResetSystem();
-    GVL_HMI.bReset := FALSE;
+    RETURN;
 END_IF
 tControlCycle(IN := TRUE , PT := T#2S);
 IF NOT tControlCycle.Q THEN
     RETURN;
 END_IF
 tControlCycle(IN := FALSE);
+
 rSolar := iSolar.GetPower();
 rWind := iWind.GetPower();
 rGeneration := rSolar + rWind;
@@ -85,22 +86,23 @@ GVL_HMI.rWindPower := rWind;
 GVL_HMI.rTotalGeneration := rGeneration;
 GVL_HMI.rTotalLoad := rLoad;
 GVL_HMI.rBatteryLevel := rBatteryLevel;
+GVL_HMI.rGridPower := iGrid.GetGridPower();
+
+IF GVL_Val.rBatteryLevel <= GVL_Val.rBatteryEmergencyLevel THEN
+    eState := E_SystemState.AlarmState;
+END_IF
 IF GVL_HMI.bAutoMode AND GVL_HMI.bManualMode THEN
     eState := E_SystemState.AlarmState;
     RETURN;
 END_IF
 IF GVL_HMI.bManualCharge AND GVL_HMI.bManualDischarge THEN
-    GVL_HMI.sBatteryStatus := 'Invalid Command';
+	eState := E_SystemState.AlarmState;
+    RETURN;
 END_IF
 IF GVL_HMI.bManualMode THEN
     GVL_HMI.sSystemState := 'Manual Mode Active';
-    IF GVL_HMI.bManualLoadShedding THEN
-        iLoad.ShedLoad();
-        GVL_HMI.sLoadStatus := 'Manual Load Shedding';
-    ELSE
-        iLoad.RestoreLoad();
-        GVL_HMI.sLoadStatus := 'Load Restored';
-    END_IF
+    iLoad.RestoreLoad();
+    GVL_HMI.sLoadStatus := 'Load Restored';
 	 IF GVL_HMI.bManualCharge THEN
         iBattery.Charge(GVL_Val.rManualChargePower);
         GVL_HMI.sBatteryStatus := 'Manual Charging';
@@ -110,9 +112,25 @@ IF GVL_HMI.bManualMode THEN
     ELSE
         GVL_HMI.sBatteryStatus := 'Battery Idle';
     END_IF
-    GVL_HMI.sGridStatus := 'Grid Manual Mode';
-    RETURN;
+	IF GVL_HMI.bManualCharge THEN
+        iGrid.SupplyPower(GVL_Val.rManualChargePower);
+        GVL_HMI.rGridPower := GVL_Val.rManualChargePower;
+        GVL_HMI.sGridStatus := 'Grid Active - Charging Battery';
+	ELSIF (rBatteryLevel <= GVL_Val.rBatterySupportThreshold) AND (rLoad > rGeneration) THEN
+        rDeficit := rLoad - rGeneration;
+    	IF rDeficit < 0 THEN
+        	rDeficit := 0;
+   	END_IF
+    	iGrid.SupplyPower(rDeficit);
+    	GVL_HMI.rGridPower := rDeficit;
+    	GVL_HMI.sGridStatus := 'Grid Supplying Power';
+	ELSE
+    	iGrid.DisconnectedGrid();
+    	GVL_HMI.rGridPower := GVL_Val.nDefaultNull;
+    	GVL_HMI.sGridStatus := 'Grid Standby';
+	END_IF
 END_IF
+
 IF GVL_HMI.bAutoMode THEN
 	CASE eState OF
 		E_SystemState.Idle :
@@ -122,6 +140,7 @@ IF GVL_HMI.bAutoMode THEN
 		    eState := E_SystemState.NormalOperation;
 		E_SystemState.NormalOperation :
 		    GVL_HMI.sSystemState := 'Normal Operation';
+			GVL_HMI.sGridStatus := 'Idle';
 		    IF rGeneration > rLoad THEN
         		eState := E_SystemState.SurplusEnergy;
 		    ELSIF (rGeneration < rLoad) AND (rBatteryLevel > GVL_Val.rBatterySupportThreshold) THEN
@@ -130,22 +149,26 @@ IF GVL_HMI.bAutoMode THEN
         		eState := E_SystemState.GridSupport;
     		END_IF;
 		E_SystemState.SurplusEnergy :
-		    rSurplus := rGeneration - rLoad;
+			rSurplus := rGeneration - rLoad;
 		    iBattery.Charge(rSurplus);
-			GVL_HMI.sBatteryStatus := 'Battery Charging';
+    		GVL_HMI.sBatteryStatus := 'Battery Charging';
 		    iGrid.DisconnectedGrid();
-			GVL_HMI.sGridStatus := 'Grid Disconnected';
+    		GVL_HMI.sGridStatus := 'Grid Disconnected';
 		    iLoad.RestoreLoad();
-    		eState := E_SystemState.NormalOperation;
+		    IF rGeneration <= rLoad THEN
+        		eState := E_SystemState.NormalOperation;
+    		END_IF
 		E_SystemState.BatterySupport :
 		    rDeficit := rLoad - rGeneration;
 		    IF rBatteryLevel > GVL_Val.rBatterySupportThreshold THEN
 		        iBattery.Discharge(rDeficit);
 		        GVL_HMI.sBatteryStatus := 'Battery Supplying Power';
-		        eState := E_SystemState.NormalOperation;
 		    ELSE
 		        eState := E_SystemState.GridSupport;
 		    END_IF;
+			IF rGeneration >= rLoad THEN
+				eState := E_SystemState.NormalOperation;
+			END_IF
 		E_SystemState.GridSupport :
 		    rDeficit := rLoad - rGeneration;
 		    iGrid.SupplyPower(rDeficit);
@@ -170,9 +193,9 @@ IF GVL_HMI.bAutoMode THEN
 		E_SystemState.AlarmState :
 		    iAlarm.CheckAlarms();
 		    GVL_HMI.sSystemState := 'Alarm Active';
-		E_SystemState.EmergencyStop :
+		E_SystemState.Stop :
 		    StopSystem();
-		    GVL_HMI.sAlarmMessage := 'Emergency Stop Activated';
+		    GVL_HMI.sAlarmMessage := 'System Stop';
 		E_SystemState.SafeState :
 		    GVL_HMI.sSystemState := 'System Safe Shutdown';
 	END_CASE
@@ -184,18 +207,17 @@ END_IF]]></ST>
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[eState := E_SystemState.Idle;
-// Clear alarms
 GVL_HMI.sAlarmMessage := '';
-// Disable modes
 GVL_HMI.bAutoMode := FALSE;
 GVL_HMI.bManualMode := FALSE;
 GVL_HMI.sBatteryStatus :='Idle';
 GVL_HMI.sLoadStatus := 'Load System Idle';
-// Reset operator buttons
 GVL_HMI.bStart := FALSE;
 GVL_HMI.bStop := FALSE;
-// Update system state
 GVL_HMI.sSystemState := 'System Reset';
+GVL_HMI.bAlarmActive := FALSE;
+GVL_HMI.bManualCharge := FALSE;
+GVL_HMI.bManualDischarge := FALSE;
 ]]></ST>
       </Implementation>
     </Method>
@@ -237,24 +259,42 @@ GVL_HMI.sSystemState := 'System Stopped Safely';]]></ST>
       <LineId Id="1458" Count="0" />
       <LineId Id="1460" Count="2" />
       <LineId Id="1464" Count="0" />
+      <LineId Id="1817" Count="0" />
       <LineId Id="1471" Count="1" />
       <LineId Id="1474" Count="0" />
       <LineId Id="1476" Count="0" />
       <LineId Id="1478" Count="0" />
       <LineId Id="1485" Count="4" />
+      <LineId Id="1818" Count="0" />
+      <LineId Id="1816" Count="0" />
+      <LineId Id="1814" Count="1" />
+      <LineId Id="1813" Count="0" />
       <LineId Id="1496" Count="0" />
       <LineId Id="1499" Count="2" />
-      <LineId Id="1728" Count="1" />
+      <LineId Id="1728" Count="0" />
+      <LineId Id="1812" Count="0" />
+      <LineId Id="1729" Count="0" />
       <LineId Id="1727" Count="0" />
       <LineId Id="1508" Count="0" />
       <LineId Id="1510" Count="0" />
-      <LineId Id="1512" Count="6" />
+      <LineId Id="1788" Count="0" />
+      <LineId Id="1783" Count="0" />
       <LineId Id="1731" Count="2" />
       <LineId Id="1735" Count="2" />
       <LineId Id="1739" Count="1" />
-      <LineId Id="1520" Count="1" />
+      <LineId Id="1520" Count="0" />
+      <LineId Id="1806" Count="0" />
+      <LineId Id="1809" Count="0" />
+      <LineId Id="1811" Count="0" />
+      <LineId Id="1807" Count="1" />
+      <LineId Id="1790" Count="0" />
+      <LineId Id="1793" Count="2" />
+      <LineId Id="1797" Count="0" />
+      <LineId Id="1799" Count="1" />
+      <LineId Id="1802" Count="3" />
+      <LineId Id="1521" Count="0" />
       <LineId Id="1523" Count="0" />
-      <LineId Id="1532" Count="0" />
+      <LineId Id="1777" Count="0" />
       <LineId Id="1697" Count="0" />
       <LineId Id="1534" Count="0" />
       <LineId Id="1541" Count="0" />
@@ -264,16 +304,16 @@ GVL_HMI.sSystemState := 'System Stopped Safely';]]></ST>
       <LineId Id="1554" Count="0" />
       <LineId Id="1561" Count="0" />
       <LineId Id="1563" Count="0" />
+      <LineId Id="1819" Count="0" />
       <LineId Id="1565" Count="1" />
       <LineId Id="1568" Count="1" />
       <LineId Id="1571" Count="2" />
-      <LineId Id="1580" Count="0" />
-      <LineId Id="1582" Count="0" />
-      <LineId Id="1584" Count="0" />
-      <LineId Id="1714" Count="0" />
-      <LineId Id="1586" Count="0" />
-      <LineId Id="1713" Count="0" />
-      <LineId Id="1588" Count="0" />
+      <LineId Id="1742" Count="0" />
+      <LineId Id="1744" Count="0" />
+      <LineId Id="1746" Count="1" />
+      <LineId Id="1749" Count="1" />
+      <LineId Id="1752" Count="0" />
+      <LineId Id="1755" Count="1" />
       <LineId Id="1591" Count="0" />
       <LineId Id="1698" Count="0" />
       <LineId Id="1700" Count="0" />
@@ -281,9 +321,9 @@ GVL_HMI.sSystemState := 'System Stopped Safely';]]></ST>
       <LineId Id="1704" Count="0" />
       <LineId Id="1706" Count="0" />
       <LineId Id="1708" Count="0" />
-      <LineId Id="1710" Count="0" />
       <LineId Id="1712" Count="0" />
       <LineId Id="1616" Count="0" />
+      <LineId Id="1757" Count="2" />
       <LineId Id="1623" Count="0" />
       <LineId Id="1625" Count="0" />
       <LineId Id="1627" Count="0" />
@@ -311,13 +351,13 @@ GVL_HMI.sSystemState := 'System Stopped Safely';]]></ST>
     </LineIds>
     <LineIds Name="FB_SystemController.ResetSystem">
       <LineId Id="13" Count="0" />
-      <LineId Id="15" Count="1" />
-      <LineId Id="18" Count="2" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="19" Count="1" />
       <LineId Id="30" Count="1" />
-      <LineId Id="22" Count="2" />
-      <LineId Id="26" Count="0" />
+      <LineId Id="23" Count="1" />
       <LineId Id="4" Count="0" />
       <LineId Id="28" Count="0" />
+      <LineId Id="33" Count="2" />
     </LineIds>
     <LineIds Name="FB_SystemController.StartSystem">
       <LineId Id="21" Count="1" />

@@ -33,14 +33,12 @@ IF tBatteryUpdate.Q THEN
     END_IF
     tBatteryUpdate(IN := FALSE);
 END_IF
-(* Safety limit *)
 IF GVL_Val.rBatteryLevel > GVL_Config.cBatteryMax THEN
     GVL_Val.rBatteryLevel := GVL_Config.cBatteryMax;
 END_IF
 IF GVL_Val.rBatteryLevel < GVL_Val.nDefaultNull THEN
     GVL_Val.rBatteryLevel := GVL_Val.nDefaultNull;
 END_IF
-(* Update HMI *)
 GVL_System.stBattery.rBatteryLevel := GVL_Val.rBatteryLevel;
 GVL_HMI.rBatteryLevel := GVL_Val.rBatteryLevel;]]></ST>
       </Implementation>
@@ -65,11 +63,9 @@ IF tBatteryUpdate.Q THEN
     END_IF
     tBatteryUpdate(IN := FALSE);
 END_IF
-(* Safety limit *)
 IF GVL_Val.rBatteryLevel < GVL_Config.cBatteryMin THEN
     GVL_Val.rBatteryLevel := GVL_Config.cBatteryMin;
 END_IF
-(* Update HMI *)
 GVL_System.stBattery.rBatteryLevel := GVL_Val.rBatteryLevel;
 GVL_HMI.rBatteryLevel := GVL_Val.rBatteryLevel;]]></ST>
       </Implementation>
@@ -96,11 +92,9 @@ GVL_HMI.rBatteryLevel := GVL_Val.rBatteryLevel;]]></ST>
       <LineId Id="26" Count="0" />
       <LineId Id="28" Count="0" />
       <LineId Id="30" Count="0" />
-      <LineId Id="33" Count="0" />
       <LineId Id="35" Count="2" />
       <LineId Id="48" Count="1" />
       <LineId Id="47" Count="0" />
-      <LineId Id="40" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
@@ -116,9 +110,7 @@ GVL_HMI.rBatteryLevel := GVL_Val.rBatteryLevel;]]></ST>
       <LineId Id="27" Count="0" />
       <LineId Id="29" Count="0" />
       <LineId Id="31" Count="0" />
-      <LineId Id="34" Count="0" />
       <LineId Id="36" Count="2" />
-      <LineId Id="41" Count="0" />
       <LineId Id="43" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>

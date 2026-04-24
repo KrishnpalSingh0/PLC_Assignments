@@ -11,7 +11,7 @@
     GridSupport,
     LoadShedding,
     AlarmState,
-    EmergencyStop,
+    Stop,
     SafeState
 );
 END_TYPE]]></Declaration>

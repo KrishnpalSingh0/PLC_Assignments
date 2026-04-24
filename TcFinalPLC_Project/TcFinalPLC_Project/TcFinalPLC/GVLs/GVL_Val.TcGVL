@@ -58,7 +58,9 @@
 	rBatterySupportThreshold : REAL := 25.0;
 	rBatteryCriticalLevel : REAL := 10.0;
 	rBatteryRecoveryLevel : REAL := 30.0;
+	rBatteryEmergencyLevel : REAL := 5.0;
 END_VAR
+
 VAR_GLOBAL PERSISTENT
     rBatteryLevel : REAL := 50.0;
 END_VAR

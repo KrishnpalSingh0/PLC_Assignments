@@ -70,6 +70,9 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\ClassDiagram\Class Diagram.TcCD">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FUNCTION_BLOCKs\AlarmManager\FB_AlarmManager.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -135,6 +138,7 @@
     <Folder Include="POUs\FUNCTION_BLOCKs\Storage" />
     <Folder Include="POUs\INTERFACEs" />
     <Folder Include="POUs\FUNCTION_BLOCKs" />
+    <Folder Include="POUs\ClassDiagram" />
     <Folder Include="POUs\TESTs" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
